@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Consumer<Auth>(
           builder: ( context, auth, child ){
             if(auth.authenticated){
-              return Text('Sesion Iniciada');
+              return Text('¡Sesion Iniciada!');
               }else{
               return Text('¡No has iniciado Sesion!');
             }
