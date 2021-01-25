@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
             if(auth.authenticated){
               return Text('Sesion Iniciada');
               }else{
-              return Text('No has iniciado Sesion');
+              return Text('¡No has iniciado Sesion!');
             }
           },
         )
