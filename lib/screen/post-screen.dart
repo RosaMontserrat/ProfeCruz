@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class PostsScreen extends StatefulWidget {
+class PostsScreen extends StatefulWidget{
+
   @override
   State<StatefulWidget> createState() {
     return PostsState();
@@ -9,7 +10,8 @@ class PostsScreen extends StatefulWidget {
 }
 
 class PostsState extends State<PostsScreen> {
-  @override
+
+  @override 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

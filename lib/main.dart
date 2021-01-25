@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_authentication_with_laravel_sanctum1/providers/auth.dart';
+
 import 'package:flutter_authentication_with_laravel_sanctum1/widgets/nav-drawer.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => Auth(),
+      child: MyApp(),
+    ), 
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Sanctum authentication'),
     );
   }
 }
@@ -28,15 +36,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: Text('Primer Practica'),
       ),
       drawer: NavDrawer(),
       body: Center(
-        child: Text('¡No has Iniciado Sesion!'),
+        child: Consumer<Auth>(
+          builder: ( context, auth, child ){
+            if(auth.authenticated){
+              return Text('Sesion Iniciada');
+              }else{
+              return Text('No has iniciado Sesion');
+            }
+          },
+        )
       ),
     );
   }
