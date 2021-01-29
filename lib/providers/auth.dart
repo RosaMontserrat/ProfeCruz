@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_authentication_with_laravel_sanctum1/models/user.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 
 import '../dio.dart';
 
 class Auth extends ChangeNotifier {
+
+  final storage = new FlutterSecureStorage();
 
   bool _authenticated = false;
   User _user;
@@ -25,6 +28,7 @@ class Auth extends ChangeNotifier {
     String token = json.decode(response.toString())['token'];
 
     await attempt(token);
+    storeToken(token);
 
   }
 
@@ -45,6 +49,10 @@ class Auth extends ChangeNotifier {
       _authenticated = false;
     }
     notifyListeners();
+  }
+
+  storeToken (String token) async {
+    await storage.write(key: 'auth', value: token);
   }
 
   Future getDeviceId () async{
