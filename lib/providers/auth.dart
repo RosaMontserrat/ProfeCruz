@@ -3,18 +3,19 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_authentication_with_laravel_sanctum1/models/user.dart';
 
 import '../dio.dart';
 
 class Auth extends ChangeNotifier {
 
   bool _authenticated = false;
+  User _user;
 
   bool get authenticated => _authenticated;
-  
-  Future login ({ Map credentials }) async {
+  User get user => _user;
 
-    _authenticated = true;
+  Future login ({ Map credentials }) async {
 
     Dio.Response response = await dio().post(
       'auth/token',
@@ -23,8 +24,26 @@ class Auth extends ChangeNotifier {
 
     String token = json.decode(response.toString())['token'];
 
-    log(token);
+    await attempt(token);
 
+  }
+
+  Future attempt (String token) async {
+    try {
+      Dio.Response response = await dio().get(
+        'auth/user',
+        options: Dio.Options(
+          headers: {
+          'Authorization': 'Bearer $token'
+          }
+        )
+      );
+      _user = User.fromJson(json.decode(response.toString()));
+      _authenticated = true;
+
+    }catch (e){
+      _authenticated = false;
+    }
     notifyListeners();
   }
 
