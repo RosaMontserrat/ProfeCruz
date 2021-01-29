@@ -1,5 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_authentication_with_laravel_sanctum1/models/post.dart';
+
+import '../dio.dart';
 
 class PostsScreen extends StatefulWidget{
 
@@ -10,6 +17,12 @@ class PostsScreen extends StatefulWidget{
 }
 
 class PostsState extends State<PostsScreen> {
+  Future<List<Post>> getPosts() async {
+    Dio.Response response = await dio().get('user/posts');
+    List posts = json.decode(response.toString());
+
+    return posts.map((post) => Post.fromJson(post)).toList();
+  }
 
   @override 
   Widget build(BuildContext context) {
@@ -18,7 +31,26 @@ class PostsState extends State<PostsScreen> {
         title: Text('Publicaciones'),
       ),
       body: Center(
-        child: Text('Publicaciiones'),
+        child: FutureBuilder<List<Post>>(
+          future: getPosts(),
+          builder: (context, snapshot){
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index){
+                    var item = snapshot.data[index];
+                    return ListTile(
+                      title: Text(item.title),
+                    );
+                  }
+                );
+            }else if (snapshot.hasError) {
+              log(snapshot.error.toString());
+              return Text('Error al cargar las publicaciones');
+            }
+            return CircularProgressIndicator();
+          },
+        ),
       ),
     );
   }
