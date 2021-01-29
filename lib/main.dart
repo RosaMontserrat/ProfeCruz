@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
 
       appBar: AppBar(
-        title: Text('Primer Practica'),
+        title: Text('Autenticacion'),
       ),
       drawer: NavDrawer(),
       body: Center(
