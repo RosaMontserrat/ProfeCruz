@@ -18,7 +18,13 @@ class PostsScreen extends StatefulWidget{
 
 class PostsState extends State<PostsScreen> {
   Future<List<Post>> getPosts() async {
-    Dio.Response response = await dio().get('user/posts');
+    Dio.Response response = await dio().get(
+      'user/posts', 
+      options: Dio.Options(
+        headers: {'auth': true}
+      )
+    );
+    
     List posts = json.decode(response.toString());
 
     return posts.map((post) => Post.fromJson(post)).toList();

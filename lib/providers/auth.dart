@@ -55,6 +55,10 @@ class Auth extends ChangeNotifier {
     await storage.write(key: 'auth', value: token);
   }
 
+  Future getToken() async{
+    return await storage.read(key: 'auth');
+  }
+
   Future getDeviceId () async{
     String deviceId;
 
